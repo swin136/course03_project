@@ -28,7 +28,6 @@ def load_operations(file_name):
 
     operations = []
     for item in operation_list:
-        # print(item)
         from_ = item.get('from')
         if from_ is None:
             from_ = ""

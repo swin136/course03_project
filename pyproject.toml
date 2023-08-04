@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "kursovaya-3"
+version = "0.1.0"
+description = ""
+authors = ["Dmitri Camenev <dmit.cameneff@yandex.ru>"]
+readme = "README.md"
+packages = [{include = "kursovaya_3"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.0"
+pytest-cov = "^4.1.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

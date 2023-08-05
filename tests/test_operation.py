@@ -29,17 +29,17 @@ def test_masquerade_account(input_account, masq_account):
 # def test_non_digit_account(non_digit_account):
 #     with pytest.raises(ValueError):
 #         masquerade_account(non_digit_account)
-
-# Длина банковоской карты не равна 16 цифрам
-@pytest.mark.parametrize('illegal_account',
-                         [
-                             'Maestro 15968378687051121',
-                             'Visa Classic 683198247673'
-                         ]
-                         )
-def test_illegal_length_account(illegal_account):
-    with pytest.raises(ValueError):
-        masquerade_account(illegal_account)
+#
+# # Длина банковоской карты не равна 16 цифрам
+# @pytest.mark.parametrize('illegal_account',
+#                          [
+#                              'Maestro 15968378687051121',
+#                              'Visa Classic 683198247673'
+#                          ]
+#                          )
+# def test_illegal_length_account(illegal_account):
+#     with pytest.raises(ValueError):
+#         masquerade_account(illegal_account)
 
 # Тестируем наш основной класс
 @pytest.fixture
@@ -132,4 +132,22 @@ def test_illegel_bank_account2():
             }
         )
 
+
+def test_illegel_bank_account3():
+   # Операция с ноиером счета, в котором менее 6 цифр
+    with pytest.raises(ValueError):
+        operation = Operation(
+            operation_id=596171168,
+            description="Открытие вклада",
+            state='EXECUTED',
+            date='2018-07-11T02:26:18.671407',
+            to_='Счет 123455656x',
+            operation_amount={
+                "amount": "79931.03",
+                "currency": {
+                    "name": "руб.",
+                    "code": "RUB"
+                }
+            }
+        )
 

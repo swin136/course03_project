@@ -1,6 +1,8 @@
 import json
 if __name__ == "__main__":
     from operation import Operation
+if __name__ == "src.main":
+    from src.operation import Operation
 
 # Количество записей для отображения в виджете
 EXECUTED_OPERATIONS_COUNT = 5
@@ -18,13 +20,16 @@ def load_operations(file_name):
         with open(file_name, mode="r", encoding="utf-8") as file:
             operation_list = json.load(file)
     except IOError:
-        print(f"Ошибка ввода-вывода файла {file_name} с историей операций.")
+        if __name__ == "__main__":
+            print(f"Ошибка ввода-вывода файла {file_name} с историей операций.")
     # Ошибка при валидации JSON-данных в исходном файле
     except json.decoder.JSONDecodeError:
-        print(f"Ошибка преобразования JSON-данных из файла {file_name}")
+        if __name__ == "__main__":
+            print(f"Ошибка преобразования JSON-данных из файла {file_name}")
 
     if operation_list is None:
-        print("Ошибка загрузки исходных данных. Программа будет завершена.")
+        if __name__ == "__main__":
+            print("Ошибка загрузки исходных данных. Программа будет завершена.")
         return
 
     operations = []
@@ -33,6 +38,7 @@ def load_operations(file_name):
         if from_ is None:
             from_ = ""
         try:
+            # print(__name__)
             operation = Operation(operation_id=item['id'],
                                   date=item['date'],
                                   state=item['state'],
@@ -43,23 +49,26 @@ def load_operations(file_name):
                                   )
             operations.append(operation)
         except KeyError:
-            print(f'Обнаружена ошибка при загрузке информации о '
+            if __name__ == "__main__":
+                print(f'Обнаружена ошибка при загрузке информации о '
                   f'банковской операции в следующей записи файла {file_name}: {item}.')
             continue
         except ValueError:
-            print(f'Обнаружена ошибка при загрузки детализированной информации из файла {file_name} о следующей '
+            if __name__ == "__main__":
+                print(f'Обнаружена ошибка при загрузки детализированной информации из файла {file_name} о следующей '
                   f'операции: {item}.')
             continue
     # Сортируем список экземпляров класса Operation по дате операции (по убыванию дат операций -> Operation.date)
-    return sorted(operations, key=lambda x: x.date, reverse=True)
+
+    return sorted(operations, key=lambda x: x.date, reverse=True) if operations != [] else []
 
 
-def filter_operations(operations: list, show_value_cnt: int) -> None:
+def filter_operations(operations: list, show_value_cnt: int) -> int:
     """
     Выводит show_value_cnt записей из списка банковских операций, имеющих статус "EXECUTED"
     :param operations: - список экземпляров класса Operation (список всех банковских операций клиента)
     :param show_value_cnt: - количество отображаемых операций для виджета
-    :return: None
+    :return: количество записей
     """
     count = 0
     for operation in operations:
@@ -71,6 +80,8 @@ def filter_operations(operations: list, show_value_cnt: int) -> None:
     # Не найдено ни одной выполненной операции
     if count == 0:
         print('К сожалению не нашлось записей о банковских операциях клиента.')
+
+    return count
 
 
 def main() -> None:

@@ -16,32 +16,7 @@ from src.operation import Operation
 def test_masquerade_account(input_account, masq_account):
     assert masquerade_account(input_account) == masq_account
 
-
-# # Буквы в номере карты, счета
-# @pytest.mark.parametrize('non_digit_account',
-#                          [
-#                              'Maestro 15968378687051xx',
-#                              'Счет xx686473678894779589',
-#                              'Visa Classic 683198247673D6C8'
-#
-#                          ]
-#                          )
-# def test_non_digit_account(non_digit_account):
-#     with pytest.raises(ValueError):
-#         masquerade_account(non_digit_account)
-#
-# # Длина банковоской карты не равна 16 цифрам
-# @pytest.mark.parametrize('illegal_account',
-#                          [
-#                              'Maestro 15968378687051121',
-#                              'Visa Classic 683198247673'
-#                          ]
-#                          )
-# def test_illegal_length_account(illegal_account):
-#     with pytest.raises(ValueError):
-#         masquerade_account(illegal_account)
-
-# Тестируем наш основной класс
+# Тестируем наш основной класс c правильными значениями полей
 @pytest.fixture
 def get_inst_class():
     operation = Operation(
@@ -61,6 +36,18 @@ def get_inst_class():
     )
     return operation
 
+def test_class_init(get_inst_class):
+    assert get_inst_class.state == 'EXECUTED'
+    assert get_inst_class.date == datetime.datetime(2019, 3, 23, 1, 9, 46, 296404)
+    assert get_inst_class.user_report() == ("23.03.2019\n"
+                                       "Перевод со счета на счет\n"
+                                       "Счет **4719 -> Счет **1160\n"
+                                       "43318.34 руб.")
+
+
+    assert str(get_inst_class) == 'Банковская операция: транзакция №873106923, дата: 23.03.2019, статус операции: EXECUTED, сумма операции: 43318.34 руб.'
+
+# Тестируем наш основной класс, при инициализации которого значение поля "from" пустое
 @pytest.fixture
 def get_inst_class_wo_from():
     operation = Operation(
@@ -79,13 +66,7 @@ def get_inst_class_wo_from():
     )
     return operation
 
-def test_class_init(get_inst_class):
-    assert get_inst_class.state == 'EXECUTED'
-    assert get_inst_class.date == datetime.datetime(2019, 3, 23, 1, 9, 46, 296404)
-    assert get_inst_class.user_report() == ("23.03.2019\n"
-                                       "Перевод со счета на счет\n"
-                                       "Счет **4719 -> Счет **1160\n"
-                                       "43318.34 руб.")
+
 
 def test_class_wo_from_init(get_inst_class_wo_from):
     assert get_inst_class_wo_from.state == 'EXECUTED'
@@ -94,6 +75,9 @@ def test_class_wo_from_init(get_inst_class_wo_from):
                                             "Открытие вклада\n"
                                             "Счет **6215\n"
                                             "79931.03 руб.")
+
+    assert str(get_inst_class_wo_from) == ('Банковская операция: транзакция №596171168, '
+                                           'дата: 11.07.2018, статус операции: EXECUTED, сумма операции: 79931.03 руб.')
 
 #
 def test_illegel_bank_account():
@@ -115,7 +99,7 @@ def test_illegel_bank_account():
         )
 #
 def test_illegel_bank_account2():
-   # Операция с ноиером счета, в котором менее 6 цифр
+   # Тестируем загрузку информации об операции в номиере счета, в котором менее 6 цифр
     with pytest.raises(ValueError):
         operation = Operation(
             operation_id=596171168,
@@ -134,14 +118,15 @@ def test_illegel_bank_account2():
 
 
 def test_illegel_bank_account3():
-   # Операция с ноиером счета, в котором менее 6 цифр
+   # Тестируем загрузку информации об операции в номере счета, в котором менее 6 цифр
+   #  to_='Счет 12345'
     with pytest.raises(ValueError):
         operation = Operation(
             operation_id=596171168,
             description="Открытие вклада",
             state='EXECUTED',
             date='2018-07-11T02:26:18.671407',
-            to_='Счет 123455656x',
+            to_='Счет 12345',
             operation_amount={
                 "amount": "79931.03",
                 "currency": {
@@ -151,3 +136,96 @@ def test_illegel_bank_account3():
             }
         )
 
+def test_illegel_bank_account4():
+    # Тестируем загрузку информации об операции в номере счета получателя имеются буквы
+    # to_='MasterCard 71583007347267XX',
+    with pytest.raises(ValueError):
+        operation = Operation(
+            operation_id=873106923,
+            description="Перевод со счета на счет",
+            state='EXECUTED',
+            date='2019-03-23T01:09:46.296404',
+            to_='MasterCard 71583007347267XX',
+            from_='Счет 44812258784861134719',
+            operation_amount={
+                "amount": "43318.34",
+                "currency": {
+                    "name": "руб.",
+                    "code": "RUB"
+                }
+            }
+        )
+
+def test_opearation_illegal_state():
+    # Тестируем загрузку информации об операции в номере счета получателя имеются буквы
+    # to_='MasterCard 71583007347267XX',
+    with pytest.raises(ValueError):
+        operation = Operation(
+            operation_id=873106923,
+            description="Перевод со счета на счет",
+            state='EXECUTED1',
+            date='2019-03-23T01:09:46.296404',
+            to_='MasterCard 7158300734726711',
+            from_='Счет 44812258784861134719',
+            operation_amount={
+                "amount": "43318.34",
+                "currency": {
+                    "name": "руб.",
+                    "code": "RUB"
+                }
+            }
+        )
+
+def test_no_currensy():
+    with pytest.raises(ValueError):
+        operation = Operation(
+            operation_id=873106923,
+            description="Перевод со счета на счет",
+            state='EXECUTED',
+            date='2019-03-23T01:09:46.296404',
+            to_='MasterCard 7158300734726711',
+            from_='Счет 44812258784861134719',
+            operation_amount={
+                "amount": "43318.34",
+                "currency1": {
+                    "name": "руб.",
+                    "code": "RUB"
+                }
+            }
+        )
+
+def test_no_amount():
+    with pytest.raises(ValueError):
+        operation = Operation(
+            operation_id=873106923,
+            description="Перевод со счета на счет",
+            state='EXECUTED',
+            date='2019-03-23T01:09:46.296404',
+            to_='MasterCard 7158300734726711',
+            from_='Счет 44812258784861134719',
+            operation_amount={
+                "amount_error": "43318.34",
+                "currency": {
+                    "name": "руб.",
+                    "code": "RUB"
+                }
+            }
+        )
+
+def test_no_currency_name():
+    with pytest.raises(ValueError):
+        operation = Operation(
+            operation_id=873106923,
+            description="Перевод со счета на счет",
+            state='EXECUTED',
+            date='2019-03-23T01:09:46.296404',
+            to_='MasterCard 7158300734726712',
+            from_='Счет 44812258784861134719',
+            operation_amount={
+                "amount": "43318.34",
+                "currency": {
+                    "name_error": "руб.",
+                    "code": "RUB"
+                }
+            }
+        )

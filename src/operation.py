@@ -10,10 +10,6 @@ def masquerade_account(account: str) -> str:
     account_list = account.split()
     # Получаем строку с номером счета/банковской карты
     num_account = account_list[len(account_list) - 1]
-    if not num_account.isdigit():
-        print("Неверный номер счета (банковской карты)")
-        raise ValueError
-
     if account_list[0] == 'Счет':
         # Преобразуем номер счета.
         # Маскируем номер счета в формате  **XXXX - 6 символов: ** плюс последние 4 цифры номера

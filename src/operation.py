@@ -68,7 +68,7 @@ class Operation:
     date = property(get_date)
     state = property(get_state)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"Банковская операция: транзакция №{self.__id}, дата: {self.__date.strftime('%d.%m.%Y')}, " \
                f"статус операции: {self.__state}, сумма операции: {self.__operationAmount['amount']} " \
                f"{self.__operationAmount['currency']['name']}"

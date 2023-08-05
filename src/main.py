@@ -1,5 +1,6 @@
 import json
-from operation import Operation
+if __name__ == "__main__":
+    from operation import Operation
 
 # Количество записей для отображения в виджете
 EXECUTED_OPERATIONS_COUNT = 5
@@ -63,7 +64,6 @@ def filter_operations(operations: list, show_value_cnt: int) -> None:
     count = 0
     for operation in operations:
         if operation.state == "EXECUTED":
-            # print(operation)
             print(f"{operation.user_report()}\n")
             count += 1
         if count == show_value_cnt:

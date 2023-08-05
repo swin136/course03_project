@@ -17,9 +17,6 @@ def masquerade_account(account: str) -> str:
 
     else:
         # Преобразуем номер банковской карты
-        if len(num_account) != 16:
-            print("Неверная длина банковской карты")
-            raise ValueError
         # Преобразуем номер карты в формат  XXXX XX** **** XXXX
         show_account_num = num_account[:4] + " " + num_account[4:6] + "*" * 2 + " " + "*" * 4 + " " + num_account[-4:]
         # удаляем из списка полный номер карты и подставляем вместо него
@@ -84,8 +81,6 @@ class Operation:
         :param test_account:
         :return:
         """
-        if test_account not in ('from', 'to'):
-            raise TypeError
         match test_account:
             case 'from':
                 account = self.__from

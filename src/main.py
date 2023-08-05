@@ -1,4 +1,5 @@
 import json
+import os
 if __name__ == "__main__":
     from operation import Operation
 if __name__ == "src.main":
@@ -6,7 +7,9 @@ if __name__ == "src.main":
 
 # Количество записей для отображения в виджете
 EXECUTED_OPERATIONS_COUNT = 5
+ROOT_SRC = ''
 SRC_FILE = 'operations.json'
+
 
 
 def load_operations(file_name):
@@ -15,9 +18,10 @@ def load_operations(file_name):
     :param file_name: имя файла с историей банковских операций в формате json
     :return:
     """
+
     operation_list = None
     try:
-        with open(file_name, mode="r", encoding="utf-8") as file:
+        with open(ROOT_SRC+file_name, mode="r", encoding="utf-8") as file:
             operation_list = json.load(file)
     except IOError:
         if __name__ == "__main__":
@@ -73,7 +77,8 @@ def filter_operations(operations: list, show_value_cnt: int) -> int:
     count = 0
     for operation in operations:
         if operation.state == "EXECUTED":
-            print(f"{operation.user_report()}\n")
+            if __name__ == "__main__":
+                print(f"{operation.user_report()}\n")
             count += 1
         if count == show_value_cnt:
             break

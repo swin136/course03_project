@@ -12,12 +12,12 @@ def masquerade_account(account: str) -> str:
     num_account = account_list[len(account_list) - 1]
     if account_list[0] == 'Счет':
         # Преобразуем номер счета.
-        # Маскируем номер счета в формате  **XXXX - 6 символов: ** плюс последние 4 цифры номера
+        # Маскируем номер счета в формате **XXXX - 6 символов: ** плюс последние 4 цифры номера
         show_account_num = "Счет " + "*" * 2 + num_account[-4:]
 
     else:
         # Преобразуем номер банковской карты
-        # Преобразуем номер карты в формат  XXXX XX** **** XXXX
+        # преобразуем номер карты в формат XXXX XX** **** XXXX
         show_account_num = num_account[:4] + " " + num_account[4:6] + "*" * 2 + " " + "*" * 4 + " " + num_account[-4:]
         # удаляем из списка полный номер карты и подставляем вместо него
         account_list.pop()

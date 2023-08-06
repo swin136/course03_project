@@ -8,10 +8,8 @@ SRC_FILE = 'operations.json'
 
 if __name__ == "__main__":
     if os.getcwd()[-len(ROOT_SRC):] != ROOT_SRC:
-        print(f'добавляем префикс {ROOT_SRC}')
         from src.operation import Operation
     else:
-        print('Ничего не добавляем')
         from operation import Operation
 
 if __name__ == "src.main":

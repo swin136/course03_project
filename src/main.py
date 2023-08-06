@@ -16,7 +16,7 @@ def load_operations(file_name):
     """
     Загружает историю банковских операций клиента в список экземпляров класса Operation
     :param file_name: имя файла с историей банковских операций в формате json
-    :return:
+    :return: отсортированный список операций по дате
     """
     operation_list = None
     try:

@@ -7,7 +7,7 @@ if __name__ == "src.main":
 
 # Количество записей для отображения в виджете
 EXECUTED_OPERATIONS_COUNT = 5
-ROOT_SRC = ''
+ROOT_SRC = 'src'
 SRC_FILE = 'operations.json'
 
 
@@ -21,7 +21,7 @@ def load_operations(file_name):
 
     operation_list = None
     try:
-        with open(ROOT_SRC+file_name, mode="r", encoding="utf-8") as file:
+        with open(file_name, mode="r", encoding="utf-8") as file:
             operation_list = json.load(file)
     except IOError:
         if __name__ == "__main__":
@@ -94,7 +94,12 @@ def main() -> None:
     Реализация основной бизнес-логики приложения
     :return: None
     """
-    operations = load_operations(SRC_FILE)
+    # Имя файла для загрузки в зависимости от точки входа программы
+    if os.getcwd()[-len(ROOT_SRC):] != ROOT_SRC:
+        file_to_load = ROOT_SRC+os.sep+SRC_FILE
+    else:
+        file_to_load = SRC_FILE
+    operations = load_operations(file_to_load )
     if operations is not None:
         print(f'Всего операций данного клиента для анализа: {len(operations)}')
         print(f'Количество последних выполненных операций данного клиента для отображения в виджете: '

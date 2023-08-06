@@ -1,15 +1,20 @@
 import json
 import os
 
-if __name__ == "__main__":
-    from operation import Operation
-if __name__ == "src.main":
-    from src.operation import Operation
-
 # Количество записей для отображения в виджете
 EXECUTED_OPERATIONS_COUNT = 5
 ROOT_SRC = 'src'
 SRC_FILE = 'operations.json'
+
+if __name__ == "__main__":
+    if os.getcwd()[-len(ROOT_SRC):] != ROOT_SRC:
+        print(os.getcwd())
+        from src.operation import Operation
+    else:
+        from operation import Operation
+
+if __name__ == "src.main":
+    from src.operation import Operation
 
 
 def load_operations(file_name):

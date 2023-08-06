@@ -1,5 +1,6 @@
 import json
 import os
+
 if __name__ == "__main__":
     from operation import Operation
 if __name__ == "src.main":
@@ -11,14 +12,12 @@ ROOT_SRC = 'src'
 SRC_FILE = 'operations.json'
 
 
-
 def load_operations(file_name):
     """
     Загружает историю банковских операций клиента в список экземпляров класса Operation
     :param file_name: имя файла с историей банковских операций в формате json
     :return:
     """
-
     operation_list = None
     try:
         with open(file_name, mode="r", encoding="utf-8") as file:
@@ -55,12 +54,12 @@ def load_operations(file_name):
         except KeyError:
             if __name__ == "__main__":
                 print(f'Обнаружена ошибка при загрузке информации о '
-                  f'банковской операции в следующей записи файла {file_name}: {item}.')
+                      f'банковской операции в следующей записи файла {file_name}: {item}.')
             continue
         except ValueError:
             if __name__ == "__main__":
                 print(f'Обнаружена ошибка при загрузки детализированной информации из файла {file_name} о следующей '
-                  f'операции: {item}.')
+                      f'операции: {item}.')
             continue
     # Сортируем список экземпляров класса Operation по дате операции (по убыванию дат операций -> Operation.date)
 
@@ -96,10 +95,10 @@ def main() -> None:
     """
     # Имя файла для загрузки в зависимости от точки входа программы
     if os.getcwd()[-len(ROOT_SRC):] != ROOT_SRC:
-        file_to_load = ROOT_SRC+os.sep+SRC_FILE
+        file_to_load = ROOT_SRC + os.sep + SRC_FILE
     else:
         file_to_load = SRC_FILE
-    operations = load_operations(file_to_load )
+    operations = load_operations(file_to_load)
     if operations is not None:
         print(f'Всего операций данного клиента для анализа: {len(operations)}')
         print(f'Количество последних выполненных операций данного клиента для отображения в виджете: '

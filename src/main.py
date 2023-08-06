@@ -1,12 +1,10 @@
 import json
 import os
-from src.operation import Operation
 
-
-# if __name__ == "__main__":
-#     from src.operation import Operation
-# if __name__ == "src.main":
-#     from src.operation import Operation
+if __name__ == "__main__":
+    from operation import Operation
+if __name__ == "src.main":
+    from src.operation import Operation
 
 # Количество записей для отображения в виджете
 EXECUTED_OPERATIONS_COUNT = 5

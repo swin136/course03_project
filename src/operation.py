@@ -10,21 +10,14 @@ def masquerade_account(account: str) -> str:
     account_list = account.split()
     # Получаем строку с номером счета/банковской карты
     num_account = account_list[len(account_list) - 1]
-    if not num_account.isdigit():
-        print("Неверный номер счета (банковской карты)")
-        raise ValueError
-
     if account_list[0] == 'Счет':
         # Преобразуем номер счета.
-        # Маскируем номер счета в формате  **XXXX - 6 символов: ** плюс последние 4 цифры номера
+        # Маскируем номер счета в формате **XXXX - 6 символов: ** плюс последние 4 цифры номера
         show_account_num = "Счет " + "*" * 2 + num_account[-4:]
 
     else:
         # Преобразуем номер банковской карты
-        if len(num_account) != 16:
-            print("Неверная длина банковской карты")
-            raise ValueError
-        # Преобразуем номер карты в формат  XXXX XX** **** XXXX
+        # преобразуем номер карты в формат XXXX XX** **** XXXX
         show_account_num = num_account[:4] + " " + num_account[4:6] + "*" * 2 + " " + "*" * 4 + " " + num_account[-4:]
         # удаляем из списка полный номер карты и подставляем вместо него
         account_list.pop()
@@ -75,7 +68,7 @@ class Operation:
     date = property(get_date)
     state = property(get_state)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"Банковская операция: транзакция №{self.__id}, дата: {self.__date.strftime('%d.%m.%Y')}, " \
                f"статус операции: {self.__state}, сумма операции: {self.__operationAmount['amount']} " \
                f"{self.__operationAmount['currency']['name']}"
@@ -88,8 +81,6 @@ class Operation:
         :param test_account:
         :return:
         """
-        if test_account not in ('from', 'to'):
-            raise TypeError
         match test_account:
             case 'from':
                 account = self.__from

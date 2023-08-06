@@ -1,16 +1,24 @@
 import pytest
+import os
 from src.main import load_operations
 from src.main import filter_operations
 
 
+# Точка входа при запуске тестирования из PyCharm и из корня проекта
 @pytest.fixture
 def get_root_dir():
-
+    root_tests = 'tests'
     """
     При запуске тестов из PyCharm возврат функции должен быть: return ""
     При запуске тестов из терминала в корне проекта возврат функции должен быть: return "tests\\" или return "tests\\"
     """
-    return "tests\\"
+    if os.getcwd()[-len(root_tests):] != root_tests:
+        tests_to_load = root_tests + os.sep
+    else:
+        tests_to_load = ''
+
+    # return "tests\\"
+    return tests_to_load
 
 
 def test_load_no_file():

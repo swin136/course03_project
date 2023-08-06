@@ -16,8 +16,6 @@ def get_root_dir():
         tests_to_load = root_tests + os.sep
     else:
         tests_to_load = ''
-
-    # return "tests\\"
     return tests_to_load
 
 

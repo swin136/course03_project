@@ -41,7 +41,6 @@ def load_operations(file_name):
         if from_ is None:
             from_ = ""
         try:
-            # print(__name__)
             operation = Operation(operation_id=item['id'],
                                   date=item['date'],
                                   state=item['state'],

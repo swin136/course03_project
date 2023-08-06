@@ -3,6 +3,9 @@ import os
 from src.main import load_operations
 from src.main import filter_operations
 
+# Каталог, где лежат тесты проекта
+ROOT_SRC = 'tests'
+
 
 # Точка входа при запуске тестирования из PyCharm и из корня проекта
 @pytest.fixture
@@ -12,7 +15,7 @@ def get_root_dir():
     При запуске тестов из терминала в корне проекта возврат функции должен быть: return "tests\" или return "tests/"
     в зависимости от операционной системы.
     """
-    root_tests = 'tests'
+    root_tests = ROOT_SRC
     if os.getcwd()[-len(root_tests):] != root_tests:
         tests_to_load = root_tests + os.sep
     else:

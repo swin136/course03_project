@@ -79,8 +79,7 @@ def filter_operations(operations: list, show_value_cnt: int) -> int:
     count = 0
     for operation in operations:
         if operation.state == "EXECUTED":
-            if __name__ == "__main__":
-                print(f"{operation.user_report()}\n")
+            print(f"{operation.user_report()}\n")
             count += 1
         if count == show_value_cnt:
             break
